@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Submissions - Task 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <a href="contact.html">Contact Form</a>
+    <a href="submissions.html" class="active">View Submissions</a>
+</nav>
+
+<div class="container" style="max-width: 600px;">
+    <h2>All Submissions</h2>
+    <p>Below is the list of messages retrieved dynamically from browser LocalStorage.</p>
+
+    <ul id="list"></ul>
+</div>
+
+<script>
+    // Safe DOM checking and JSON parsing to eliminate console crashes
+    window.addEventListener('DOMContentLoaded', () => {
+        let submissions = [];
+        try {
+            submissions = JSON.parse(localStorage.getItem("contacts")) || [];
+        } catch (e) {
+            console.error("Error parsing localStorage data:", e);
+            submissions = [];
+        }
+
+        let list = document.getElementById("list");
+        if (!list) return;
+
+        if (submissions.length === 0) {
+            list.innerHTML = '<p style="text-align: center; color: #999;">No submissions found yet.</p>';
+        } else {
+            // Clear any default content first
+            list.innerHTML = "";
+
+            // Standard string concatenation to prevent template literal compilation issues
+            submissions.forEach(s => {
+                let card = document.createElement('li');
+                card.className = 'submission-card';
+                card.innerHTML =
+                    '<p><strong>Name:</strong> ' + (s.name || '') + '</p>' +
+                    '<p><strong>Email:</strong> ' + (s.email || '') + '</p>' +
+                    '<p style="margin-top: 10px; color: #555;"><strong>Message:</strong> ' + (s.message || '') + '</p>';
+                list.appendChild(card);
+            });
+        }
+    });
+</script>
+</body>
+</html>
